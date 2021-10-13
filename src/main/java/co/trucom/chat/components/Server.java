@@ -109,23 +109,23 @@ public class Server {
 	private String formatMessage(SimpleClient client, String message) {
 		String result = message;
 		
-		if(client.isAllLowerCase()) {
+		if(client.getCommandsMap().get("upper")) {
 			result = result.toLowerCase();
 		}
 
-		if(client.isAllUpperCase()) {
+		if(client.getCommandsMap().get("lower")) {
 			result = result.toUpperCase();
 		}
 		
-		if(client.isAlternateCases()) {
+		if(client.getCommandsMap().get("alternate")) {
 			result = alternateString(result);
 		}
 		
-		if(client.isRedDot()) {
+		if(client.getCommandsMap().get("reddot")) {
 			result = formatRedDot(result);
 		}
 		
-		if (client.isCrypt()) {
+		if (client.getCommandsMap().get("crypt")) {
 			result = encrypt(result);
 		}
 
@@ -163,12 +163,14 @@ public class Server {
 	private void handleCommand(String message, SimpleClient client) {
 		message = message.trim().toLowerCase();
 		
+		client.switchCommand(message.substring(1));
+		
 		switch(message) {
-			case "/upper": client.switchUpperCase(); sendMessage(client, "UpperCase activated!", true); break;
-			case "/lower": client.switchLowerCase(); sendMessage(client, "LowerCase activated!", true); break;
-			case "/street" : client.switchAlternateCase(); sendMessage(client, "StreetCase activated!", true); break;
-			case "/roosters": client.switchRedDot(); sendMessage(client, "+18 activated!", true); break;
-			case "/crypt": client.switchCrypt(); sendMessage(client, "Encryption activated!", true); break;
+			case "/upper": sendMessage(client, "UpperCase activated!", true); break;
+			case "/lower": sendMessage(client, "LowerCase activated!", true); break;
+			case "/street" : sendMessage(client, "StreetCase activated!", true); break;
+			case "/roosters": sendMessage(client, "+18 activated!", true); break;
+			case "/crypt": sendMessage(client, "Encryption activated!", true); break;
 		}
 	}
 	

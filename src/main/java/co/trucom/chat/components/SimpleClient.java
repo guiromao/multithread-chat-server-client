@@ -1,83 +1,50 @@
 package co.trucom.chat.components;
 
 import java.net.Socket;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SimpleClient {
 
 	private Socket socket;
 	private String username;
-	private boolean allUpperCase;
-	private boolean allLowerCase;
-	private boolean alternateCases;
-	private boolean redDot;
-	private boolean crypt;
+	private Map<String, Boolean> commandsMap;
 
 	public SimpleClient(Socket socket, String username) {
 		this.socket = socket;
 		this.username = username;
-		allUpperCase = false;
-		allLowerCase = false;
-		alternateCases = false;
-		redDot = false;
-		crypt = false;
+		commandsMap = new HashMap<>();
+		commandsMap.put("upper", false);
+		commandsMap.put("lower", false);
+		commandsMap.put("reddot", false);
+		commandsMap.put("alternate", false);
+		commandsMap.put("street", false);
+		commandsMap.put("crypt", false);
 	}
 
 	public Socket getSocket() {
 		return socket;
 	}
 	
-	public void switchAlternateCase() {
-		alternateCases = alternateCases ? false : true;
+	public void switchCommand(String cmd) {
+		System.out.println(cmd);
+		if (cmd == null || commandsMap.get(cmd) == null) {
+			throw new IllegalArgumentException("Couldn't find desired command");
+		}
+		cmd = cmd.toLowerCase();
 		
-		if(alternateCases) {
-			allUpperCase = false;
-			allLowerCase = false;
-			redDot = false;
-			crypt = false;
+		commandsMap.put(cmd, commandsMap.get(cmd) ? false : true);
+		
+		if(commandsMap.get(cmd)) {
+			disableAllBut(cmd);
 		}
 	}
 
-	public void switchUpperCase() {
-		allUpperCase = allUpperCase ? false : true;
-
-		if(allUpperCase) {
-			allLowerCase = false;
-			alternateCases = false;
-			redDot = false;
-			crypt = false;
-		}
-	}
-
-	public void switchLowerCase() {
-		allLowerCase = allLowerCase ? false : true;
-
-		if(allLowerCase) {
-			allUpperCase = false;
-			alternateCases = false;
-			redDot = false;
-			crypt = false;
-		}
-	}
-	
-	public void switchRedDot() {
-		redDot = redDot ? false : true;
-
-		if(redDot) {
-			allUpperCase = false;
-			alternateCases = false;
-			allLowerCase = false;
-			crypt = false;
-		}
-	}
-	
-	public void switchCrypt() {
-		crypt = crypt ? false : true;
-
-		if(redDot) {
-			allUpperCase = false;
-			alternateCases = false;
-			allLowerCase = false;
-			redDot = false;
+	private void disableAllBut(String command) {
+		for(Map.Entry<String, Boolean> cmd : commandsMap.entrySet()) {
+			if(!cmd.getValue()) {
+				commandsMap.put(cmd.getKey(), false);
+			}
 		}
 	}
 
@@ -93,44 +60,11 @@ public class SimpleClient {
 		this.username = username;
 	}
 
-	public boolean isAllUpperCase() {
-		return allUpperCase;
+	public Map<String, Boolean> getCommandsMap() {
+		return commandsMap;
 	}
 
-	public void setAllUpperCase(boolean allUpperCase) {
-		this.allUpperCase = allUpperCase;
+	public void setCommandsMap(Map<String, Boolean> commandsMap) {
+		this.commandsMap = commandsMap;
 	}
-
-	public boolean isAllLowerCase() {
-		return allLowerCase;
-	}
-
-	public void setAllLowerCase(boolean allLowerCase) {
-		this.allLowerCase = allLowerCase;
-	}
-
-	public boolean isAlternateCases() {
-		return alternateCases;
-	}
-
-	public void setAlternateCases(boolean alternateCases) {
-		this.alternateCases = alternateCases;
-	}
-
-	public boolean isRedDot() {
-		return redDot;
-	}
-
-	public void setRedDot(boolean redDot) {
-		this.redDot = redDot;
-	}
-
-	public boolean isCrypt() {
-		return crypt;
-	}
-
-	public void setCrypt(boolean crypt) {
-		this.crypt = crypt;
-	}
-
 }
