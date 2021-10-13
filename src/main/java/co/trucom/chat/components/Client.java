@@ -67,7 +67,7 @@ public class Client {
 			throw new IllegalStateException("Error creating writer to server: " + e);
 		}
 	}
-	
+
 	public void send(String message) {
 		writer.println(message);
 		writer.flush();

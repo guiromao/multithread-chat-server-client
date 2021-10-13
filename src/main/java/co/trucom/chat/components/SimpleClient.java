@@ -16,14 +16,10 @@ public class SimpleClient {
 		commandsMap = new HashMap<>();
 		commandsMap.put("upper", false);
 		commandsMap.put("lower", false);
-		commandsMap.put("reddot", false);
+		commandsMap.put("roosters", false);
 		commandsMap.put("alternate", false);
 		commandsMap.put("street", false);
 		commandsMap.put("crypt", false);
-	}
-
-	public Socket getSocket() {
-		return socket;
 	}
 	
 	public void switchCommand(String cmd) {
@@ -42,10 +38,14 @@ public class SimpleClient {
 
 	private void disableAllBut(String command) {
 		for(Map.Entry<String, Boolean> cmd : commandsMap.entrySet()) {
-			if(!cmd.getValue()) {
+			if(!cmd.getValue() && !cmd.getKey().equals(command)) {
 				commandsMap.put(cmd.getKey(), false);
 			}
 		}
+	}
+	
+	public Socket getSocket() {
+		return socket;
 	}
 
 	public void setSocket(Socket socket) {

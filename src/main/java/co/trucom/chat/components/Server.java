@@ -109,11 +109,11 @@ public class Server {
 	private String formatMessage(SimpleClient client, String message) {
 		String result = message;
 		
-		if(client.getCommandsMap().get("upper")) {
+		if(client.getCommandsMap().get("lower")) {
 			result = result.toLowerCase();
 		}
 
-		if(client.getCommandsMap().get("lower")) {
+		if(client.getCommandsMap().get("upper")) {
 			result = result.toUpperCase();
 		}
 		
@@ -121,7 +121,7 @@ public class Server {
 			result = alternateString(result);
 		}
 		
-		if(client.getCommandsMap().get("reddot")) {
+		if(client.getCommandsMap().get("roosters")) {
 			result = formatRedDot(result);
 		}
 		
@@ -162,9 +162,9 @@ public class Server {
 
 	private void handleCommand(String message, SimpleClient client) {
 		message = message.trim().toLowerCase();
-		
-		client.switchCommand(message.substring(1));
-		
+
+		client.switchCommand(message.substring(1).trim());
+
 		switch(message) {
 			case "/upper": sendMessage(client, "UpperCase activated!", true); break;
 			case "/lower": sendMessage(client, "LowerCase activated!", true); break;
