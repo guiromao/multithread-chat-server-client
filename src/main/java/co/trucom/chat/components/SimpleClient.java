@@ -6,18 +6,19 @@ import java.util.Map;
 
 public class SimpleClient {
 
+	private long id;
 	private Socket socket;
 	private String username;
 	private Map<String, Boolean> commandsMap;
 
-	public SimpleClient(Socket socket, String username) {
+	public SimpleClient(Socket socket, String username, long id) {
 		this.socket = socket;
 		this.username = username;
+		this.id = id;
 		commandsMap = new HashMap<>();
 		commandsMap.put("upper", false);
 		commandsMap.put("lower", false);
 		commandsMap.put("roosters", false);
-		commandsMap.put("alternate", false);
 		commandsMap.put("street", false);
 		commandsMap.put("crypt", false);
 	}
@@ -36,11 +37,9 @@ public class SimpleClient {
 	}
 
 	private void disableAllBut(String command) {
-		System.out.println("User " + username + " activated " + command);
 		for(Map.Entry<String, Boolean> cmd : commandsMap.entrySet()) {
 			if(!cmd.getKey().equals(command)) {
 				commandsMap.put(cmd.getKey(), false);
-				System.out.println(cmd.getKey() + ": " + cmd.getValue());
 			}
 		}
 	}
@@ -55,6 +54,14 @@ public class SimpleClient {
 
 	public String getUsername() {
 		return username;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
 	}
 
 	public void setUsername(String username) {

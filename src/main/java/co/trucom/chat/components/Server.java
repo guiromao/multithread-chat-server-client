@@ -29,11 +29,13 @@ public class Server {
 	private ServerSocket serverSocket;
 	private int port;
 	private List<SimpleClient> clients;
+	private long countClients;
 
 	public Server(int port) {
 		this.port = port;
 		executor = (ThreadPoolExecutor) Executors.newCachedThreadPool();
 		clients = new ArrayList<>();
+		countClients = 0;
 	}
 
 	public void start() {
@@ -53,12 +55,15 @@ public class Server {
 	private void handleClients() throws IOException{
 		while(serverSocket.isBound()) {
 			final Socket socket = serverSocket.accept();
+			final long currClient = ++countClients;
 			executor.execute(() -> {
 				try {
 					BufferedReader inStream = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 					String username = inStream.readLine().trim();
-					final SimpleClient client = new SimpleClient(socket, username);
+
+					final SimpleClient client = new SimpleClient(socket, username, currClient);
 					clients.add(client);
+
 					String incomingMsg;
 
 					String welcomeStr = "Welcome to the chat, " + client.getUsername() + "!\n"
@@ -79,6 +84,7 @@ public class Server {
 						}
 					}
 
+					inStream.close();
 					sendAllExceptUser(client, client.getUsername() + " left the chat.", true);
 				} catch(IOException e) {
 					throw new IllegalStateException("Error interacting with client: " + e);
@@ -104,7 +110,7 @@ public class Server {
 		msgToSend += (isFromServer) ? message : formatMessage(client, message);
 		
 		for(SimpleClient simpleClient: clients) {
-			if(!simpleClient.getUsername().equals(client.getUsername())) {
+			if(simpleClient.getId() != client.getId()) {
 				sendMessage(simpleClient, msgToSend, isFromServer);
 			}
 		}
@@ -117,19 +123,19 @@ public class Server {
 			result = result.toLowerCase();
 		}
 
-		if(client.getCommandsMap().get("upper")) {
+		else if(client.getCommandsMap().get("upper")) {
 			result = result.toUpperCase();
 		}
 		
-		if(client.getCommandsMap().get("alternate")) {
+		else if(client.getCommandsMap().get("street")) {
 			result = alternateString(result);
 		}
 		
-		if(client.getCommandsMap().get("roosters")) {
+		else if(client.getCommandsMap().get("roosters")) {
 			result = formatRedDot(result);
 		}
 		
-		if (client.getCommandsMap().get("crypt")) {
+		else if (client.getCommandsMap().get("crypt")) {
 			result = encrypt(result);
 		}
 
@@ -140,7 +146,7 @@ public class Server {
 		String [] commandLine = message.split(" ");
 		String cmd = commandLine[0].trim().toLowerCase();
 
-		if(List.of("upper", "lower", "roosters", "crypt", "street")
+		if(List.of("/upper", "/lower", "/roosters", "/crypt", "/street")
 				.contains(cmd)) {
 
 			client.switchCommand(cmd.substring(1).trim());
