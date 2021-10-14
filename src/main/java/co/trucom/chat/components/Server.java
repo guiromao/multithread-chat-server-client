@@ -1,8 +1,6 @@
 package co.trucom.chat.components;
 
-import static co.trucom.chat.utils.MessageUtils.alternateString;
-import static co.trucom.chat.utils.MessageUtils.encrypt;
-import static co.trucom.chat.utils.MessageUtils.formatRedDot;
+import static co.trucom.chat.utils.MessageUtils.formatMessage;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -65,12 +63,11 @@ public class Server {
 					clients.add(client);
 
 					String incomingMsg;
-
 					String welcomeStr = "Welcome to the chat, " + client.getUsername() + "!\n"
 							+ "You may start typing.\n"
 							+ "Type '/help' to get to know the chat's commands.\n";
-					sendMessage(client, welcomeStr, true);
 					String enterMsg = client.getUsername() + " entered the chat.";
+					sendMessage(client, welcomeStr, true);
 					sendAllExceptUser(client, enterMsg, true);
 					System.out.println(enterMsg);
 
@@ -114,32 +111,6 @@ public class Server {
 				sendMessage(simpleClient, msgToSend, isFromServer);
 			}
 		}
-	}
-
-	private String formatMessage(SimpleClient client, String message) {
-		String result = message;
-		
-		if(client.hasCommand("lower")) {
-			result = result.toLowerCase();
-		}
-
-		else if(client.hasCommand("upper")) {
-			result = result.toUpperCase();
-		}
-		
-		else if(client.hasCommand("street")) {
-			result = alternateString(result);
-		}
-		
-		else if(client.hasCommand("roosters")) {
-			result = formatRedDot(result);
-		}
-		
-		else if (client.hasCommand("crypt")) {
-			result = encrypt(result);
-		}
-
-		return result;
 	}
 
 	private void handleCommand(String message, SimpleClient client) {

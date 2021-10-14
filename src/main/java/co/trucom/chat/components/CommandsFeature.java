@@ -20,9 +20,9 @@ public class CommandsFeature {
 		assertCommandExists(cmd);
 
 		cmd = cmd.toLowerCase();
-		
+
 		commandsMap.put(cmd, !commandsMap.get(cmd));
-		
+
 		if(commandsMap.get(cmd)) {
 			disableAllBut(cmd);
 		}

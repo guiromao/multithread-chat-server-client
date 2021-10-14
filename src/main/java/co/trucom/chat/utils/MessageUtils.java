@@ -1,8 +1,40 @@
 package co.trucom.chat.utils;
 
+import static co.trucom.chat.utils.MessageUtils.alternateString;
+import static co.trucom.chat.utils.MessageUtils.encrypt;
+import static co.trucom.chat.utils.MessageUtils.formatRedDot;
+
+import co.trucom.chat.components.SimpleClient;
+
 public class MessageUtils {
 	
-	public static String formatRedDot(String message) {
+	public static String formatMessage(SimpleClient client, String message) {
+		String result = message;
+		
+		if(client.hasCommand("lower")) {
+			result = result.toLowerCase();
+		}
+
+		else if(client.hasCommand("upper")) {
+			result = result.toUpperCase();
+		}
+
+		else if(client.hasCommand("street")) {
+			result = alternateString(result);
+		}
+
+		else if(client.hasCommand("roosters")) {
+			result = formatRedDot(result);
+		}
+
+		else if (client.hasCommand("crypt")) {
+			result = encrypt(result);
+		}
+
+		return result;
+	}
+	
+	private static String formatRedDot(String message) {
 		String [] msgArray = message.split(" ");
 		String result = "";
 		
@@ -13,7 +45,7 @@ public class MessageUtils {
 		return result;
 	}
 	
-	public static String alternateString(String string) {
+	private static String alternateString(String string) {
 		String result = "";
 		
 		for(int i = 0; i < string.length(); i++) {
@@ -27,7 +59,7 @@ public class MessageUtils {
 		return result;
 	}
 	
-	public static String encrypt(String message) {
+	private static String encrypt(String message) {
 		String result = "";
 		
 		for(int i = 0; i < message.length(); i++) {
