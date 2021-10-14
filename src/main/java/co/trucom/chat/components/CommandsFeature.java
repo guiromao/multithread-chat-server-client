@@ -21,7 +21,7 @@ public class CommandsFeature {
 
 		cmd = cmd.toLowerCase();
 		
-		commandsMap.put(cmd, commandsMap.get(cmd) ? false : true);
+		commandsMap.put(cmd, !commandsMap.get(cmd));
 		
 		if(commandsMap.get(cmd)) {
 			disableAllBut(cmd);
