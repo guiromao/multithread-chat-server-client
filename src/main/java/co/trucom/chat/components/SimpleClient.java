@@ -23,7 +23,6 @@ public class SimpleClient {
 	}
 	
 	public void switchCommand(String cmd) {
-		System.out.println(cmd);
 		if (cmd == null || commandsMap.get(cmd) == null) {
 			throw new IllegalArgumentException("Couldn't find desired command");
 		}
@@ -37,9 +36,11 @@ public class SimpleClient {
 	}
 
 	private void disableAllBut(String command) {
+		System.out.println("User " + username + " activated " + command);
 		for(Map.Entry<String, Boolean> cmd : commandsMap.entrySet()) {
-			if(!cmd.getValue() && !cmd.getKey().equals(command)) {
+			if(!cmd.getKey().equals(command)) {
 				commandsMap.put(cmd.getKey(), false);
+				System.out.println(cmd.getKey() + ": " + cmd.getValue());
 			}
 		}
 	}
