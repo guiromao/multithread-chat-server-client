@@ -1,5 +1,9 @@
 package co.trucom.chat.components;
 
+import static co.trucom.chat.utils.MessageUtils.alternateString;
+import static co.trucom.chat.utils.MessageUtils.encrypt;
+import static co.trucom.chat.utils.MessageUtils.formatRedDot;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -131,58 +135,24 @@ public class Server {
 
 		return result;
 	}
-	
-	private String encrypt(String message) {
-		String result = "";
-		
-		for(int i = 0; i < message.length(); i++) {
-			int n = (int) Math.round(Math.random() * 20);
-			int op = (int) Math.round(Math.random());
-			n = (op == 1) ? n : -n;
-			
-			result += (char) (message.charAt(i) + n);
-		}
-		
-		return result;
-	}
-	
-	private String alternateString(String string) {
-		String result = "";
-		
-		for(int i = 0; i < string.length(); i++) {
-			if(i % 2 == 0) {
-				result += ("" + string.charAt(i)).toUpperCase();
-			} else  {
-				result += ("" + string.charAt(i)).toLowerCase();
-			}
-		}
-		
-		return result;
-	}
 
 	private void handleCommand(String message, SimpleClient client) {
-		message = message.trim().toLowerCase();
+		String [] commandLine = message.split(" ");
+		String cmd = commandLine[0].trim().toLowerCase();
 
-		client.switchCommand(message.substring(1).trim());
+		if(List.of("upper", "lower", "roosters", "crypt", "street")
+				.contains(cmd)) {
 
-		switch(message) {
-			case "/upper": sendMessage(client, "UpperCase activated!", true); break;
-			case "/lower": sendMessage(client, "LowerCase activated!", true); break;
-			case "/street" : sendMessage(client, "StreetCase activated!", true); break;
-			case "/roosters": sendMessage(client, "+18 activated!", true); break;
-			case "/crypt": sendMessage(client, "Encryption activated!", true); break;
+			client.switchCommand(cmd.substring(1).trim());
+
+			switch(cmd) {
+				case "/upper": sendMessage(client, "UpperCase activated!", true); break;
+				case "/lower": sendMessage(client, "LowerCase activated!", true); break;
+				case "/street" : sendMessage(client, "StreetCase activated!", true); break;
+				case "/roosters": sendMessage(client, "+18 activated!", true); break;
+				case "/crypt": sendMessage(client, "Encryption activated!", true); break;
+			}
 		}
-	}
-	
-	private String formatRedDot(String message) {
-		String [] msgArray = message.split(" ");
-		String result = "";
-		
-		for(String str: msgArray) {
-			result += str + " .|. ";
-		}
-		
-		return result;
 	}
 
 	private void connect() {
