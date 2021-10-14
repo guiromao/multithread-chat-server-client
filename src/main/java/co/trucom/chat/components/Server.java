@@ -119,23 +119,23 @@ public class Server {
 	private String formatMessage(SimpleClient client, String message) {
 		String result = message;
 		
-		if(client.getCommandsMap().get("lower")) {
+		if(client.hasCommand("lower")) {
 			result = result.toLowerCase();
 		}
 
-		else if(client.getCommandsMap().get("upper")) {
+		else if(client.hasCommand("upper")) {
 			result = result.toUpperCase();
 		}
 		
-		else if(client.getCommandsMap().get("street")) {
+		else if(client.hasCommand("street")) {
 			result = alternateString(result);
 		}
 		
-		else if(client.getCommandsMap().get("roosters")) {
+		else if(client.hasCommand("roosters")) {
 			result = formatRedDot(result);
 		}
 		
-		else if (client.getCommandsMap().get("crypt")) {
+		else if (client.hasCommand("crypt")) {
 			result = encrypt(result);
 		}
 
