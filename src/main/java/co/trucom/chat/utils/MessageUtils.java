@@ -1,9 +1,5 @@
 package co.trucom.chat.utils;
 
-import static co.trucom.chat.utils.MessageUtils.alternateString;
-import static co.trucom.chat.utils.MessageUtils.encrypt;
-import static co.trucom.chat.utils.MessageUtils.formatRedDot;
-
 import co.trucom.chat.components.SimpleClient;
 
 public class MessageUtils {
