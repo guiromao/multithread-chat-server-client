@@ -57,7 +57,8 @@ public class Server {
 			executor.execute(() -> {
 				try {
 					BufferedReader inStream = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-					String username = inStream.readLine().trim();
+					String username = !(inStream.readLine().trim().equals("")) ? 
+							inStream.readLine().trim() : "guest" + currClient;
 
 					final SimpleClient client = new SimpleClient(socket, username, currClient);
 					clients.add(client);
